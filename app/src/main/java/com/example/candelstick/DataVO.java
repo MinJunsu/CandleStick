@@ -4,11 +4,11 @@ import java.util.Date;
 
 public class DataVO
 {
-    private Date dateTime;
+    private String dateTime;
     private String name;
     private float openPrice, highPrice, lowPrice, closePrice;
 
-    public DataVO(Date dateTime, String name, float openPrice, float highPrice, float lowPrice, float closePrice)
+    public DataVO(String dateTime, String name, float openPrice, float highPrice, float lowPrice, float closePrice)
     {
         this.dateTime = dateTime;
         this.name = name;
@@ -18,12 +18,12 @@ public class DataVO
         this.closePrice = closePrice;
     }
 
-    public Date getDateTime()
+    public String getDateTime()
     {
         return dateTime;
     }
 
-    public void setDateTime(Date dateTime)
+    public void setDateTime(String dateTime)
     {
         this.dateTime = dateTime;
     }
