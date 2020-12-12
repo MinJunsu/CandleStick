@@ -19,9 +19,19 @@ public class MainView extends View
     private Paint myPaint;
     private int candleSize, slimCandleSize;
 
+
+
     public MainView(Context context, @Nullable AttributeSet attrs)
     {
         super(context, attrs);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasWindowFocus)
+    {
+        super.onWindowFocusChanged(hasWindowFocus);
+        setSize(getWidth(), getHeight());
+        invalidate();
     }
 
     @Override
