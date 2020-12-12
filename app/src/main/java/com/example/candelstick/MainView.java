@@ -72,6 +72,7 @@ public class MainView extends View {
                 canvas.drawLine(posX, 0 + ((int) (yMaxSize * 1.1) / 30) * i, posX, 0 + ((int) (yMaxSize * 1.1) / 30) * (i + 1), myPaint);
             }
         }
+        DrawSpecificPrice(canvas);
     }
 
     public void DrawCandleStickPrice(Canvas canvas)
@@ -88,7 +89,7 @@ public class MainView extends View {
         }
         myPaint.setTextSize(xSize / 40);
         myPaint.setColor(Color.BLACK);
-        canvas.drawText(candleText, 15, 25, myPaint);
+        canvas.drawText(candleText, 15, 30, myPaint);
         DrawCandleStickLine(canvas);
         repaint();
     }
@@ -96,10 +97,18 @@ public class MainView extends View {
     public void DrawBound(Canvas canvas)
     {
         myPaint.setColor(Color.GRAY);
-//        canvas.drawRect(0, 0, 20, ySize, myPaint);
-//        canvas.drawRect(xSize - 20, 0, xSize, ySize, myPaint);
-//        canvas.drawRect(0, 0, xSize, 20, myPaint);
-//        canvas.drawRect(0, ySize - 20, xSize, ySize, myPaint);
+        canvas.drawRect(-5, 0, 10, ySize, myPaint);
+        canvas.drawRect(xMaxSize + 5, 0, xSize, ySize, myPaint);
+        canvas.drawRect(0, 0, xSize, 10, myPaint);
+        canvas.drawRect(0, ySize - 10, xSize, ySize, myPaint);
+    }
+
+    public void DrawSpecificPrice(Canvas canvas)
+    {
+        myPaint.setColor(Color.BLACK);
+        float tmp = (Min) + (1 - ((posY - 10) / yMaxSize)) * (Max - Min);
+        float price = (float) (Math.round(tmp) + ((tmp - ((int) tmp)) > 0.5 ? 0.5 : 0.0));
+        canvas.drawText(String.valueOf(price), xMaxSize + 5, posY + 10, myPaint);
     }
 
     public void DrawCandleStick(Canvas canvas)
