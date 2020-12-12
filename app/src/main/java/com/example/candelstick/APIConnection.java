@@ -16,6 +16,7 @@ import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -81,6 +82,7 @@ public class APIConnection extends AsyncTask<String, Void, String>
         {
             e.printStackTrace();
         }
+        Collections.reverse(dataVOS);
         return dataVOS;
     }
 

@@ -5,30 +5,30 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-public class MainView extends View
-{
+public class MainView extends View {
     private int xSize, ySize;
     private float Max, Min;
     private ArrayList<DataVO> dataSet;
     private Paint myPaint;
     private int candleSize, slimCandleSize;
+    private float posX, posY;
+    private String candleText;
 
 
-
-    public MainView(Context context, @Nullable AttributeSet attrs)
-    {
+    public MainView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
     @Override
-    public void onWindowFocusChanged(boolean hasWindowFocus)
-    {
+    public void onWindowFocusChanged(boolean hasWindowFocus) {
         super.onWindowFocusChanged(hasWindowFocus);
         setSize(getWidth(), getHeight());
         invalidate();
@@ -38,7 +38,39 @@ public class MainView extends View
     public void onDraw(Canvas canvas)
     {
         super.onDraw(canvas);
+        DrawCandleStick(canvas);
+        DrawCandleStickPrice(canvas);
+    }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event)
+    {
+        posX = event.getX();
+        posY = event.getY();
+        Log.d("position", "x : " + posX + ", y : " + posY);
+        return super.onTouchEvent(event);
+    }
+
+    public void DrawCandleStickPrice(Canvas canvas)
+    {
+        for(int i = 0; i < dataSet.size(); i++)
+        {
+            float left = (xSize / candleSize) * i;
+            float right = (xSize / candleSize) * (i + 1);
+            if((left <= posX) && (posX <= right))
+            {
+                candleText = "T: " + dataSet.get(i).getDateTime().substring(0, 9) + " O: " + dataSet.get(i).getOpenPrice() + " H: " + dataSet.get(i).getHighPrice() + " L: " + dataSet.get(i).getLowPrice() + " C: " + dataSet.get(i).getClosePrice();
+                break;
+            }
+        }
+        myPaint.setColor(Color.BLACK);
+        myPaint.setTextSize(xSize / 40);
+        canvas.drawText(candleText, 10, 25, myPaint);
+        repaint();
+    }
+
+    public void DrawCandleStick(Canvas canvas)
+    {
         if(dataSet != null)
         {
             myPaint = new Paint();
@@ -82,11 +114,6 @@ public class MainView extends View
                 canvas.drawRect((xSize / candleSize) * i, top, (xSize / candleSize) * (i + 1), bottom, myPaint);
             }
         }
-    }
-
-    public void setDistance()
-    {
-
     }
 
     public void repaint()
