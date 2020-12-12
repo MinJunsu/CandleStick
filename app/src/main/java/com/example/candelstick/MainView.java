@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 public class MainView extends View {
     private int xSize, ySize;
+    private int xMaxSize, yMaxSize;
     private float Max, Min;
     private ArrayList<DataVO> dataSet;
     private Paint myPaint;
@@ -26,6 +27,7 @@ public class MainView extends View {
     public MainView(Context context, @Nullable AttributeSet attrs)
     {
         super(context, attrs);
+        myPaint = new Paint();
     }
 
     @Override
@@ -40,6 +42,7 @@ public class MainView extends View {
     public void onDraw(Canvas canvas)
     {
         super.onDraw(canvas);
+        DrawBound(canvas);
         DrawCandleStick(canvas);
         DrawCandleStickPrice(canvas);
     }
@@ -49,7 +52,6 @@ public class MainView extends View {
     {
         posX = event.getX();
         posY = event.getY();
-        Log.d("position", "x : " + posX + ", y : " + posY);
         return super.onTouchEvent(event);
     }
 
@@ -60,14 +62,14 @@ public class MainView extends View {
         {
             if(i % 2 == 0)
             {
-                canvas.drawLine(0 + ((int) (xSize * 1.1) / 100) * i, posY, 0 + ((int) (xSize * 1.1) / 100) * (i + 1), posY, myPaint);
+                canvas.drawLine(0 + ((int) (xMaxSize * 1.1) / 100) * i, posY, 0 + ((int) (xMaxSize * 1.1) / 100) * (i + 1), posY, myPaint);
             }
         }
         for(int i = 0; i < 30; i++)
         {
             if(i % 2 == 0)
             {
-                canvas.drawLine(posX, 0 + ((int) (ySize * 1.1) / 30) * i, posX, 0 + ((int) (ySize * 1.1) / 30) * (i + 1), myPaint);
+                canvas.drawLine(posX, 0 + ((int) (yMaxSize * 1.1) / 30) * i, posX, 0 + ((int) (yMaxSize * 1.1) / 30) * (i + 1), myPaint);
             }
         }
     }
@@ -76,8 +78,8 @@ public class MainView extends View {
     {
         for(int i = 0; i < dataSet.size(); i++)
         {
-            float left = (xSize / candleSize) * i;
-            float right = (xSize / candleSize) * (i + 1);
+            float left = (xMaxSize / candleSize) * i;
+            float right = (xMaxSize / candleSize) * (i + 1);
             if((left <= posX) && (posX <= right))
             {
                 candleText = "T: " + dataSet.get(i).getDateTime().substring(0, 9) + " O: " + dataSet.get(i).getOpenPrice() + " H: " + dataSet.get(i).getHighPrice() + " L: " + dataSet.get(i).getLowPrice() + " C: " + dataSet.get(i).getClosePrice();
@@ -86,18 +88,25 @@ public class MainView extends View {
         }
         myPaint.setTextSize(xSize / 40);
         myPaint.setColor(Color.BLACK);
-        canvas.drawText(candleText, 10, 25, myPaint);
+        canvas.drawText(candleText, 15, 25, myPaint);
         DrawCandleStickLine(canvas);
         repaint();
+    }
+
+    public void DrawBound(Canvas canvas)
+    {
+        myPaint.setColor(Color.GRAY);
+//        canvas.drawRect(0, 0, 20, ySize, myPaint);
+//        canvas.drawRect(xSize - 20, 0, xSize, ySize, myPaint);
+//        canvas.drawRect(0, 0, xSize, 20, myPaint);
+//        canvas.drawRect(0, ySize - 20, xSize, ySize, myPaint);
     }
 
     public void DrawCandleStick(Canvas canvas)
     {
         if(dataSet != null)
         {
-            myPaint = new Paint();
             setMaxMin();
-
             for(int i = 0; i < dataSet.size(); i++)
             {
                 float open = dataSet.get(i).getOpenPrice();
@@ -109,31 +118,31 @@ public class MainView extends View {
                 if(open > close)
                 {
                     myPaint.setColor(Color.RED);
-                    top = ySize - ((open - Min) / (Max - Min) * ySize);
-                    bottom = ySize - ((close - Min) / (Max - Min) * ySize);
-                    stickTop = ySize - ((high - Min) / (Max - Min) * ySize);
-                    stickBottom = ySize - ((low - Min) / (Max - Min) * ySize);
+                    top = yMaxSize - ((open - Min) / (Max - Min) * yMaxSize);
+                    bottom = yMaxSize - ((close - Min) / (Max - Min) * yMaxSize);
+                    stickTop = yMaxSize - ((high - Min) / (Max - Min) * yMaxSize);
+                    stickBottom = yMaxSize - ((low - Min) / (Max - Min) * yMaxSize);
 
                 }
                 else if (open == close)
                 {
                     myPaint.setColor(Color.GREEN);
-                    top = ySize - ((close - Min) / (Max - Min) * ySize);
-                    bottom = ySize - ((open - Min) / (Max - Min) * ySize);
-                    stickTop = ySize - ((high - Min) / (Max - Min) * ySize);
-                    stickBottom = ySize - ((low - Min) / (Max - Min) * ySize);
+                    top = yMaxSize - ((close - Min) / (Max - Min) * yMaxSize);
+                    bottom = yMaxSize - ((open - Min) / (Max - Min) * yMaxSize);
+                    stickTop = yMaxSize - ((high - Min) / (Max - Min) * yMaxSize);
+                    stickBottom = yMaxSize - ((low - Min) / (Max - Min) * yMaxSize);
                 }
                 else
                 {
                     myPaint.setColor(Color.GREEN);
-                    top = ySize - ((close - Min) / (Max - Min) * ySize);
-                    bottom = ySize - ((open - Min) / (Max - Min) * ySize);
-                    stickTop = ySize - ((high - Min) / (Max - Min) * ySize);
-                    stickBottom = ySize - ((low - Min) / (Max - Min) * ySize);
+                    top = yMaxSize - ((close - Min) / (Max - Min) * yMaxSize);
+                    bottom = yMaxSize - ((open - Min) / (Max - Min) * yMaxSize);
+                    stickTop = yMaxSize - ((high - Min) / (Max - Min) * yMaxSize);
+                    stickBottom = yMaxSize - ((low - Min) / (Max - Min) * yMaxSize);
                 }
 
-                canvas.drawRect((float) ((xSize / candleSize) * (i + 0.5)) - (xSize / (candleSize * 10)), stickTop, (float) ((xSize / candleSize) * (i + 0.5)) + (xSize / (candleSize * 10)), stickBottom, myPaint);
-                canvas.drawRect((xSize / candleSize) * i, top, (xSize / candleSize) * (i + 1), bottom, myPaint);
+                canvas.drawRect(((float) ((xMaxSize / candleSize) * (i + 0.5)) - (xMaxSize / (candleSize * 10))) + 10, stickTop + 10, ((float) ((xMaxSize / candleSize) * (i + 0.5)) + (xMaxSize / (candleSize * 10))) + 10, stickBottom + 10, myPaint);
+                canvas.drawRect(((xMaxSize / candleSize) * i) + 10, top + 10, ((xMaxSize / candleSize) * (i + 1)) + 10, bottom + 10, myPaint);
             }
         }
     }
@@ -166,6 +175,8 @@ public class MainView extends View {
     {
         this.xSize = X;
         this.ySize = Y;
+        this.xMaxSize = (int) (xSize * 0.9);
+        this.yMaxSize = (int) (ySize * 0.9);
     }
 
     public void setCandleSize(int candleSize)
