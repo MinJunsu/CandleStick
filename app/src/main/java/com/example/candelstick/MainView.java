@@ -52,6 +52,7 @@ public class MainView extends View {
     {
         posX = event.getX();
         posY = event.getY();
+        repaint();
         return super.onTouchEvent(event);
     }
 
@@ -72,19 +73,25 @@ public class MainView extends View {
                 canvas.drawLine(posX, 0 + ((int) (yMaxSize * 1.1) / 30) * i, posX, 0 + ((int) (yMaxSize * 1.1) / 30) * (i + 1), myPaint);
             }
         }
+        myPaint.setColor(Color.BLACK);
         DrawSpecificPrice(canvas);
+        DrawSpecificDatetime(canvas);
     }
 
     public void DrawCandleStickPrice(Canvas canvas)
     {
         for(int i = 0; i < dataSet.size(); i++)
         {
-            float left = (xMaxSize / candleSize) * i;
-            float right = (xMaxSize / candleSize) * (i + 1);
+            float left = ((xMaxSize / candleSize) * i) + 10;
+            float right = ((xMaxSize / candleSize) * (i + 1)) + 10;
             if((left <= posX) && (posX <= right))
             {
-                candleText = "T: " + dataSet.get(i).getDateTime().substring(0, 9) + " O: " + dataSet.get(i).getOpenPrice() + " H: " + dataSet.get(i).getHighPrice() + " L: " + dataSet.get(i).getLowPrice() + " C: " + dataSet.get(i).getClosePrice();
+                candleText = "T: " + dataSet.get(i).getDateTime().substring(0, 10) + " O: " + dataSet.get(i).getOpenPrice() + " H: " + dataSet.get(i).getHighPrice() + " L: " + dataSet.get(i).getLowPrice() + " C: " + dataSet.get(i).getClosePrice();
                 break;
+            }
+            else
+            {
+                candleText = "";
             }
         }
         myPaint.setTextSize(xSize / 40);
@@ -100,15 +107,36 @@ public class MainView extends View {
         canvas.drawRect(-5, 0, 10, ySize, myPaint);
         canvas.drawRect(xMaxSize + 5, 0, xSize, ySize, myPaint);
         canvas.drawRect(0, 0, xSize, 10, myPaint);
-        canvas.drawRect(0, ySize - 10, xSize, ySize, myPaint);
+        canvas.drawRect(0, yMaxSize + 10, xSize, ySize, myPaint);
     }
 
     public void DrawSpecificPrice(Canvas canvas)
     {
-        myPaint.setColor(Color.BLACK);
-        float tmp = (Min) + (1 - ((posY - 10) / yMaxSize)) * (Max - Min);
-        float price = (float) (Math.round(tmp) + ((tmp - ((int) tmp)) > 0.5 ? 0.5 : 0.0));
-        canvas.drawText(String.valueOf(price), xMaxSize + 5, posY + 10, myPaint);
+        if((10 <= posY) && (posY <= yMaxSize))
+        {
+            float tmp = (Min) + (1 - ((posY - 10) / yMaxSize)) * (Max - Min);
+            float price = (float) (Math.round(tmp) + ((tmp - ((int) tmp)) > 0.5 ? 0.5 : 0.0));
+            canvas.drawText(String.valueOf(price), xMaxSize + 5, posY + 10, myPaint);
+        }
+    }
+
+    public void DrawSpecificDatetime(Canvas canvas)
+    {
+        String tmp = "";
+        if((10 <= posX) && (posX <= xMaxSize))
+        {
+            for(int i = 0; i <= dataSet.size(); i++)
+            {
+                float left = ((xMaxSize / candleSize) * i) + 10;
+                float right = ((xMaxSize / candleSize) * (i + 1)) + 10;
+                if((left <= posX) && (posX <= right))
+                {
+                    tmp = dataSet.get(i).getDateTime().substring(0, 10);
+                    break;
+                }
+            }
+        }
+        canvas.drawText(tmp, posX - 70, ySize - 5, myPaint);
     }
 
     public void DrawCandleStick(Canvas canvas)
