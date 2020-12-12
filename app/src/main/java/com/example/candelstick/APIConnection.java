@@ -32,11 +32,6 @@ public class APIConnection extends AsyncTask<String, Void, String>
         this.APISecret = APISecret;
     }
 
-    public APIConnection()
-    {
-
-    }
-
     public String get_data_set()
     {
         String result = "";

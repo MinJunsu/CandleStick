@@ -23,12 +23,14 @@ public class MainView extends View {
     private String candleText;
 
 
-    public MainView(Context context, @Nullable AttributeSet attrs) {
+    public MainView(Context context, @Nullable AttributeSet attrs)
+    {
         super(context, attrs);
     }
 
     @Override
-    public void onWindowFocusChanged(boolean hasWindowFocus) {
+    public void onWindowFocusChanged(boolean hasWindowFocus)
+    {
         super.onWindowFocusChanged(hasWindowFocus);
         setSize(getWidth(), getHeight());
         invalidate();
@@ -51,6 +53,25 @@ public class MainView extends View {
         return super.onTouchEvent(event);
     }
 
+    public void DrawCandleStickLine(Canvas canvas)
+    {
+        myPaint.setColor(Color.GRAY);
+        for(int i = 0; i < 100; i++)
+        {
+            if(i % 2 == 0)
+            {
+                canvas.drawLine(0 + ((int) (xSize * 1.1) / 100) * i, posY, 0 + ((int) (xSize * 1.1) / 100) * (i + 1), posY, myPaint);
+            }
+        }
+        for(int i = 0; i < 30; i++)
+        {
+            if(i % 2 == 0)
+            {
+                canvas.drawLine(posX, 0 + ((int) (ySize * 1.1) / 30) * i, posX, 0 + ((int) (ySize * 1.1) / 30) * (i + 1), myPaint);
+            }
+        }
+    }
+
     public void DrawCandleStickPrice(Canvas canvas)
     {
         for(int i = 0; i < dataSet.size(); i++)
@@ -63,9 +84,10 @@ public class MainView extends View {
                 break;
             }
         }
-        myPaint.setColor(Color.BLACK);
         myPaint.setTextSize(xSize / 40);
+        myPaint.setColor(Color.BLACK);
         canvas.drawText(candleText, 10, 25, myPaint);
+        DrawCandleStickLine(canvas);
         repaint();
     }
 
