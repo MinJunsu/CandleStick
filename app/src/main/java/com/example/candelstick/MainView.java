@@ -104,9 +104,9 @@ public class MainView extends View {
     public void DrawBound(Canvas canvas)
     {
         myPaint.setColor(Color.GRAY);
-        canvas.drawRect(-5, 0, 10, ySize, myPaint);
+        canvas.drawRect(-5, 0, 5, ySize, myPaint);
         canvas.drawRect(xMaxSize + 5, 0, xSize, ySize, myPaint);
-        canvas.drawRect(0, 0, xSize, 10, myPaint);
+        canvas.drawRect(-5, 0, xSize, 5, myPaint);
         canvas.drawRect(0, yMaxSize + 10, xSize, ySize, myPaint);
     }
 
