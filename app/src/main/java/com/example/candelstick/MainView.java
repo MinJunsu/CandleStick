@@ -20,7 +20,7 @@ public class MainView extends View {
     private ArrayList<DataVO> dataSet;
     private Paint myPaint;
     private int candleSize, slimCandleSize;
-    private float posX, posY;
+    private float posX, posY, posDx;
     private String candleText;
 
 
@@ -52,6 +52,28 @@ public class MainView extends View {
     {
         posX = event.getX();
         posY = event.getY();
+
+        switch(event.getAction())
+        {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_UP:
+                posX = event.getX();
+                posY = event.getY();
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                posX = event.getX();
+                posY = event.getY();
+                int length = event.getHistorySize();
+                float sx, ex;
+                if (length != 0)
+                {
+                    sx = event.getHistoricalX(0);
+                    ex = event.getHistoricalX(length-1);
+                    posDx += ((int)(ex-sx));
+                }
+                break;
+        }
         repaint();
         return super.onTouchEvent(event);
     }
