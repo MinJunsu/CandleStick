@@ -60,21 +60,6 @@ public class MainView extends View {
                 posX = event.getX();
                 posY = event.getY();
                 break;
-
-            case MotionEvent.ACTION_MOVE:
-                posX = event.getX();
-                posY = event.getY();
-                int length = event.getHistorySize();
-                float sx, ex;
-                if (length != 0)
-                {
-                    sx = event.getHistoricalX(0);
-                    ex = event.getHistoricalX(length-1);
-                    posDx += (ex - sx);
-                }
-                Log.d("T1", "실행");
-                Log.d("T2", String.valueOf(posDx));
-                break;
         }
         repaint();
         return super.onTouchEvent(event);
