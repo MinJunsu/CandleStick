@@ -52,7 +52,7 @@ public class MainView extends View {
     {
         posX = event.getX();
         posY = event.getY();
-
+        Log.d("T1", "실행");
         switch(event.getAction())
         {
             case MotionEvent.ACTION_DOWN:
@@ -70,8 +70,10 @@ public class MainView extends View {
                 {
                     sx = event.getHistoricalX(0);
                     ex = event.getHistoricalX(length-1);
-                    posDx += ((int)(ex-sx));
+                    posDx += (ex - sx);
                 }
+                Log.d("T1", "실행");
+                Log.d("T2", String.valueOf(posDx));
                 break;
         }
         repaint();
@@ -81,14 +83,14 @@ public class MainView extends View {
     public void DrawCandleStickLine(Canvas canvas)
     {
         myPaint.setColor(Color.GRAY);
-        for(int i = 0; i < 100; i++)
+        for(int i = 0; i < (candleSize * 2); i++)
         {
             if(i % 2 == 0)
             {
                 canvas.drawLine(0 + ((int) (xMaxSize * 1.1) / 100) * i, posY, 0 + ((int) (xMaxSize * 1.1) / 100) * (i + 1), posY, myPaint);
             }
         }
-        for(int i = 0; i < 30; i++)
+        for(int i = 0; i < candleSize; i++)
         {
             if(i % 2 == 0)
             {
